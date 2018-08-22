@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Perceptron(object):
-    def _init_(self, eta, n_iter):
+    def _init_(self, eta=0.01, n_iter=10):
         self.eta = eta
         self.n_iter = n_iter
     def fit (self, X, y) :

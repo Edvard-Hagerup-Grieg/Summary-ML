@@ -4,6 +4,7 @@ import numpy as np
 import ADALINE as adl
 from matplotlib.colors import ListedColormap
 
+
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
 df = pd.read_csv(url, header = None)
 
@@ -35,10 +36,9 @@ adln._init_(eta=0.01, n_iter=10)
 adln.fit(X_std, y)
 plt.plot(range(1, len(adln.cost_) + 1), adln.cost_, marker='o', color='r')
 
-plt.xlabel('Эпохи')
-plt.ylabel('Сумма квадратичных ошибок')
+plt.xlabel('Epochs')
+plt.ylabel('Sum-squared-error')
 
-plt.figure(2)
 def plot_decision_regions (X, y, classifier, resolution=0.02) :
     # настроить генератор маркеров и палитру
     markers = ('s', 'x', 'o','^','v')
@@ -64,16 +64,16 @@ def plot_decision_regions (X, y, classifier, resolution=0.02) :
 
 plt.figure(2)
 plot_decision_regions(X_std, y, classifier=adln)
-plt.title('ADALINE (градиентный спуск)')
-plt.xlabel('длина чашелистика [стандартизованная]')
-plt.ylabel('длина лепестка [стандвртизованная]')
+plt.title('ADALINE (batch gradient descent)')
+plt.xlabel('sepal length [standardized]')
+plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 
 plt.figure(3)
 plot_decision_regions(X_std, y, classifier=adln2)
-plt.title('ADALINE (градиентный спуск)')
-plt.xlabel('длина чашелистика [не стандартизованная]')
-plt.ylabel('длина лепестка [не стандвртизованная]')
+plt.title('ADALINE (batch gradient descent)')
+plt.xlabel('sepal length [not standardized]')
+plt.ylabel('petal length [not standardized]')
 plt.legend(loc='upper left')
 
 plt.show()

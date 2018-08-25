@@ -1,34 +1,29 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import Perceptron as pct
+import ADALINE_sgd as adlsgd
 from matplotlib.colors import ListedColormap
 
 
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
 df = pd.read_csv(url, header = None)
-#print(df.tail())
 
 y = df.iloc[0:100, 4].values
 y = np.where(y == 'Iris-setosa', -1, 1)
 X = df.iloc[0:100, [0, 2]].values
 
-# plt.figure(3)
-# plt.scatter(X[:50, 0], X[:50, 1],
-#             color='red', marker='o', label='щетинистый')
-# plt.scatter(X[50:100, 0], X[50:100, 1],
-#             color='blue', marker='x', label='разноцветный')
-# plt.xlabel('длина чашелистика')
-# plt.ylabel('длина лепестка')
-# plt.legend(loc='upper left')
+X_std = np.copy(X)
+X_std[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
+X_std[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
 
 plt.figure(1)
-ppn = pct.Perceptron()
-ppn._init_(eta=0.01, n_iter=10)
-ppn.fit(X, y)
-plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
+
+adl = adlsgd.ADALINE_sgd()
+adl._init_(eta=0.01, n_iter=15, random_state=1)
+adl.fit(X_std, y)
+plt.plot(range(1, len(adl.cost_) + 1), adl.cost_, marker='o')
 plt.xlabel('Epochs')
-plt.ylabel('Number of misclassifications')
+plt.ylabel('Average Cost')
 
 def plot_decision_regions (X, y, classifier, resolution=0.02) :
     # настроить генератор маркеров и палитру
@@ -54,9 +49,10 @@ def plot_decision_regions (X, y, classifier, resolution=0.02) :
                     marker=markers[idx], label=cl)
 
 plt.figure(2)
-plot_decision_regions(X, y, classifier=ppn)
-plt.xlabel('sepal length [cm]')
-plt.ylabel('petal length [cm]')
+plot_decision_regions(X_std, y, classifier=adl)
+plt.title('ADALINE (stochastic gradient descent)')
+plt.xlabel('sepal length [standardized]')
+plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 
 plt.show()

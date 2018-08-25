@@ -5,6 +5,7 @@ class Perceptron(object):
     def _init_(self, eta=0.01, n_iter=10):
         self.eta = eta
         self.n_iter = n_iter
+
     def fit (self, X, y) :
         self.w_ = np.zeros(1 + X.shape[1])
         self.errors_ = []
@@ -17,7 +18,9 @@ class Perceptron(object):
                 errors += int(update != 0.0)
             self.errors_.append(errors)
         return self
+
     def net_input(self, X):
         return np.dot(X, self.w_[1:]) + self.w_[0]
+
     def predict(self, X):
         return np.where(self.net_input(X) >= 0.0, 1, -1)
